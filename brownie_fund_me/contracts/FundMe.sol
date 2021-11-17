@@ -12,8 +12,10 @@ contract FundMe {
     mapping(address => uint256) public addressToAmountFunded;
     address public owner;
     address[] public funders;
+    AggregatorV3Interface public priceFeed;
     
-    constructor() public {
+    constructor(address _priceFeed) public {
+        priceFeed = AggregatorV3Interface(_priceFeed);
         owner = msg.sender;
     }
     
@@ -29,12 +31,10 @@ contract FundMe {
     }
     
     function getVersion() public view returns (uint256) {
-        AggregatorV3Interface priceFeed = AggregatorV3Interface(0x8A753747A1Fa494EC906cE90E9f37563A8AF630e);
         return priceFeed.version();
     }
     
     function getPrice() public view returns (uint256) {
-        AggregatorV3Interface priceFeed = AggregatorV3Interface(0x8A753747A1Fa494EC906cE90E9f37563A8AF630e);
         (
             ,
             int price,
@@ -43,13 +43,20 @@ contract FundMe {
             
              )  = priceFeed.latestRoundData(); 
              
-        return uint256(price * 10e10);
+        return uint256(price * 10_000_000_000);
     }
     
     function getConversionRate(uint256 ethAmount) public view returns (uint256) {
         uint256 ethPrice = getPrice();
-        uint256 ethAmountInUsd = (ethPrice * ethAmount) / 10e18;
+        uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1_000_000_000_000_000_000;
         return ethAmountInUsd;
+    }
+
+    function getEntranceFee() public view returns (uint256) {
+        uint256 minimumUSD = 50 * 10**18;
+        uint256 price = getPrice();
+        uint256 precision = 1 * 10**18;
+        return (minimumUSD * precision) / price;
     }
     
     modifier onlyOwner {
