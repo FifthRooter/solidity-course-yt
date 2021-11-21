@@ -17,7 +17,8 @@ networks:
     chainid: 4
     host: https://mainnet.infura.io/v3/$WEB3_INFURA_PROJECT_ID
     explorer: https://api-rinkeby.etherscan.io/api
-  mainnet-fork-dev :
+  mainnet-fork-dev 
+:
     eth_usd_price_feed: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419"
     verify: False
   development:
