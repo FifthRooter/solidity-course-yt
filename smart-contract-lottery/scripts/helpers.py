@@ -5,7 +5,8 @@ from brownie import (
     Contract,
     MockV3Aggregator,
     VRFCoordinatorMock,
-    LinkToken   
+    LinkToken,
+    interface   
     )
 
 FORKED_LOCAL_ENVIRONMENTS = ['mainnet-fork', 'mainnet-fork-dev']
@@ -66,4 +67,12 @@ def deploy_mocks(decimals=DECIMALS, initial_value=INITIAL_VALUE):
     link_token = LinkToken.deploy({'from': account})
     VRFCoordinatorMock.deploy(link_token.address, {'from': account})
     print('deployed')
+
+def fund_with_link(contract_address, account=None, link_token=None, amount=1_000_000_000_000_000_00):
+    account = account if account else get_account()
+    link_token = link_token if link_token else get_contract('link_token')
+    tx = link_token.transfer(contract_address, amount, {'from': account})
+    tx.wait(1)
+    print('Fund contract')
+    return tx
 

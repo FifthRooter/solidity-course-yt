@@ -24,6 +24,7 @@ contract Lottery is VRFConsumerBase, Ownable {
     LOTTERY_STATE public lottery_state;
     uint256 public fee;
     bytes32 public keyHash;
+    event RequestedRandomness(bytes32 requestId);
 
 
     constructor(
@@ -33,7 +34,7 @@ contract Lottery is VRFConsumerBase, Ownable {
         uint256 _fee,
         bytes32 _keyHash
     ) public VRFConsumerBase(_vrfCoordinator, _link){
-        usdEntryFee = 50 * (10**28);
+        usdEntryFee = 50 * (10**18);
         ethUsdPriceFeed = AggregatorV3Interface(_priceFeedAddress);
         lottery_state = LOTTERY_STATE.CLOSED;
         fee = _fee;
@@ -72,6 +73,7 @@ contract Lottery is VRFConsumerBase, Ownable {
         // Chainlink VRF offers Verifiable Randomness (provable random number)
         lottery_state = LOTTERY_STATE.CALCULATING_WINNER;
         bytes32 requestId = requestRandomness(keyHash, fee);
+        emit RequestedRandomness(requestId);
     }
 
     function fulfillRandomness(bytes32 _requestId, uint256 _randomness) internal override{
@@ -79,7 +81,7 @@ contract Lottery is VRFConsumerBase, Ownable {
         require(_randomness > 0, "random-not-found");
         uint256 indexOfWinner = _randomness % players.length;
         recentWinner = players[indexOfWinner];
-        recentWinner.transfer(address(this). balance);
+        recentWinner.transfer(address(this).balance);
         // Reset the lottery
         players = new address payable[](0);
         LOTTERY_STATE.CLOSED;
