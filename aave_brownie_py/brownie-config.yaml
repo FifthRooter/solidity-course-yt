@@ -4,6 +4,7 @@ compiler:
   solc:
     remappings:
       - "@aave=aave/protocol-v2@1.0.1"
+dotenv: .env
 networks:
   default: mainnet-fork
   kovan:
@@ -18,4 +19,3 @@ networks:
     dai_token: "0x6B175474E89094C44Da98b954EedeAC495271d0F"
 wallets:
   from_key: ${PRIVATE_KEY}
-dotenv: .env

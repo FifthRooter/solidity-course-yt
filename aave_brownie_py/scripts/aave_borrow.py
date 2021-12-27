@@ -1,4 +1,3 @@
-import web3
 from brownie import network, config, interface
 from scripts.helpers import get_account
 from scripts.get_weth import get_weth
@@ -13,17 +12,19 @@ def main():
         get_weth()
     lending_pool = get_lending_pool()
     # Approve sending the ERC-20 tokens
-    approve_erc20(amount, lending_pool.address, erc20_address, account)
-    print('Depositing...')
-    tx = lending_pool.deposit(erc20_address,amount, account.address, 0, {'from': account})
-    tx.wait(1)
-    print('Deposited!')
+
+    # approve_erc20(amount, lending_pool.address, erc20_address, account)
+    # print('Depositing...')
+    # tx = lending_pool.deposit(erc20_address,amount, account.address, 0, {'from': account})
+    # tx.wait(2)
+    # print('Deposited!')
+
     # How much tho? Use getUserAccountData()
     borrowable_eth, total_debt = get_borrowable_data(lending_pool, account)
     print("Let's borrow!")
     # DAI price needed first
     dai_eth_price = get_asset_price(config['networks'][network.show_active()]['dai_eth_price_feed'])
-    amount_dai_to_borrow = (1 / dai_eth_price) * (borrowable_eth * 0.95)
+    amount_dai_to_borrow = (1 / dai_eth_price) * (borrowable_eth * 0.4)
     print(f"Borrowing {amount_dai_to_borrow} DAI")
     dai_address = config['networks'][network.show_active()]['dai_token']
     borrow_tx = lending_pool.borrow(
