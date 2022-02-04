@@ -10,6 +10,7 @@ LOCAL_BLOCKCHAIN_ENVIRONMENTS = [
 ]
 
 OPENSEA_URL = 'https://testnets.opensea.io/assets/{}/{} '
+BREED_MAPPING = {0: 'PUG', 1: 'SHIBA_INU', 2: 'ST_BERNARD'}
 
 def get_account(index=None, id=None):
     if index:
@@ -74,3 +75,6 @@ def fund_with_link(contract_address, account=None, link_token=None, amount=Web3.
     tx.wait(1)
     print('Fund contract')
     return tx
+
+def get_breed(breed_number):
+    return BREED_MAPPING[breed_number]

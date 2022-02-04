@@ -1,11 +1,9 @@
-{
-"name": "PUG",
-"description": "An adorable PUG pup!",
-"image": "https://ipfs.io/ipfs/QmSsYRx3LpDAb1GZQm7zZ1AuHZjfbPkD6J7s9r41xu1mf8?filename=pug.png",
-"attributes": [
-{
-"trait_type": "cuteness",
-"value": 100
-}
-]
+from attr import attributes
+
+
+metadata_template = {
+    'name': '',
+    'description': '',
+    'image': '',
+    'attributes': [{'trait_type': 'cuteness', 'value': 100}]
 }
